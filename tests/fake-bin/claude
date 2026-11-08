@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Stand-in agent for lifecycle tests. The prompt's first keyword picks the behaviour.
+for last; do :; done
+result=$(printf '%s' "$last" | grep -o '[^ ]*/result\.md' | head -1)
+run=${result%/out/result.md}
+out=$run/out
+printf '%s\n' "$*" > "$out/fake-args"
+pwd > "$out/fake-cwd"
+env | grep '^HERDR_[A-Z_]*=' | grep -v '^HERDR_ENV=' | cut -d= -f1 > "$out/fake-env"
+case "$last" in
+  *TRUSTME*)
+    echo ' Is this a project you created or one you trust?'
+    echo ' ❯ No, exit'
+    echo '   Yes, I trust this folder'
+    IFS= read -rsn3 _
+    echo ' ❯ Yes, I trust this folder'
+    read -r _ ; printf 'fake report\n' > "$result"; exit 0 ;;
+  *PROSETRUST*)
+    echo 'Is this a project you created or one you trust? Yes, I trust this folder'
+    exec sleep 300 ;;
+  *HOOKS*) echo 'Hooks need review'; exec sleep 300 ;;
+  *CRASHRESULT*) printf 'partial\n' > "$result"; exit 7 ;;
+  *EARLY*) printf 'early text\n' > "$result"; echo 'THE-SCREEN-TEXT'; exec sleep 300 ;;
+  *SYMLINK*) ln -s /etc/hostname "$result"; exit 0 ;;
+  *CRASH*) echo "starting" ; echo "boom: credentials broken" >&2; exit 7 ;;
+  *NORESULT*) exit 0 ;;
+  *HANG*) exec sleep 300 ;;
+  *) printf 'fake report\n' > "$result"; exit 0 ;;
+esac
