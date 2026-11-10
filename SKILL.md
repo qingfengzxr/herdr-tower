@@ -5,7 +5,7 @@ description: Use when the user explicitly asks for a tower (塔台) to coordinat
 
 # Herdr Tower
 
-子代理各占一个 Herdr pane，进程结束 pane 就消失。标签：`🐝 名字 · 📝 任务 · 🧠 模型 · 🧰 CLI`。
+子代理各占一个 Herdr pane，进程结束 pane 就消失。标签：`🚀 名字 · 📝 任务 · 🧠 模型 · 🧰 CLI`。
 
 先确认 `HERDR_ENV=1`，否则告诉用户需要在 Herdr 里运行。
 

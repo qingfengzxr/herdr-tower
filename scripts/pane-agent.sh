@@ -246,7 +246,7 @@ start_pane() {
 
   local shown=$model label
   [ "$shown" = - ] && shown=默认
-  label="🐝 $name · 📝 $task · 🧠 $shown · 🧰 $cli"
+  label="🚀 $name · 📝 $task · 🧠 $shown · 🧰 $cli"
   printf '%s' "$label" > "$run/label"
 
   pane=$(bash "$here/layout.sh" place --cwd "$cwd") || die "could not place a pane"

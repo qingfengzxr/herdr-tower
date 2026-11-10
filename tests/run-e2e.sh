@@ -49,7 +49,7 @@ trial() { # cli
   [ "$rc" = 0 ] || bad "$c normal output" "$out"
   [ -s "$(get result "$out")" ] && ok "$c result file" || bad "$c result file"
   eq "$c normal pane gone" "$(gone "$(get pane "$out")")" gone
-  eq "$c label" "$(cat "$(get run "$out")/label")" "🐝 n-$c · 📝 正常完成 · 🧠 $m · 🧰 $c"
+  eq "$c label" "$(cat "$(get run "$out")/label")" "🚀 n-$c · 📝 正常完成 · 🧠 $m · 🧰 $c"
 
   echo "== approve"
   work=$(mktemp -d "$tmp/w.XXXXXX"); can=$out_dir/approved-$c

@@ -53,7 +53,7 @@ wait "$bg"; rc=$?; out=$(cat "$tmp/o")
 eq "done rc" "$rc" 0; eq "done status" "$(get status "$out")" done
 has "result printed" "$out" "fake report"
 eq "pane gone" "$(gone "$(get pane "$out")")" gone
-has "label format" "$(herdr tab list --workspace "$WS" >/dev/null; printf '%s' "$(cat "$(get run "$out")/label")")" "🐝 开发 · 📝 审查"
+has "label format" "$(herdr tab list --workspace "$WS" >/dev/null; printf '%s' "$(cat "$(get run "$out")/label")")" "🚀 开发 · 📝 审查"
 has "label model" "$(cat "$(get run "$out")/label")" "· 🧠 fake-model · 🧰 claude"
 R=$(get run "$out")/out
 has "prompt text survives quoting" "$(cat "$R/fake-args")" 'do "quoted" $HOME `work` 中文'
@@ -67,7 +67,7 @@ out=$(start --role 开发 --model other --name 自定义 --task t --prompt-file 
 R=$(get run "$out")/out
 has "model override" "$(cat "$R/fake-args")" "--model other"
 has "approval override" "$(cat "$R/fake-args")" "--permission-mode manual"
-has "name override" "$(cat "$(get run "$out")/label")" "🐝 自定义 ·"
+has "name override" "$(cat "$(get run "$out")/label")" "🚀 自定义 ·"
 out=$(start --cli claude --task t --prompt-file "$(prompt ok)" --state-dir "$tmp/state/job1" --timeout 60)
 has "default model label" "$(cat "$(get run "$out")/label")" "🧠 默认 · 🧰 claude"
 has "explicit state dir" "$(get run "$out")" "$tmp/state/job1/runs/"

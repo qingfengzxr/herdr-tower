@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Choose or create the pane for the next subagent; print its ID.
 #   layout.sh place --cwd DIR      the tower is $HERDR_PANE_ID
-# Ownership comes from Herdr itself: a pane labelled with the bee belongs to the tower.
+# Ownership comes from Herdr itself: a pane labelled with the rocket belongs to the tower.
 set -u
 here=${BASH_SOURCE[0]%/*}
 . "$here/lib.sh"
-OWN_PREFIX='🐝'
-OVERFLOW_PREFIX='🐝 调度 '
+OWN_PREFIX='🚀'
+OVERFLOW_PREFIX='🚀 调度 '
 PER_TAB=4
 TOWER_SHARE=0.4
 lock=''

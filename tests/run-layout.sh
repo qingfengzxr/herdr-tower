@@ -32,7 +32,7 @@ new_space; tab1=$(tab_of "$TOWER")
 p1=$(place); eq "place rc" "$?" 0
 eq "first pane stays in tower tab" "$(tab_of "$p1")" "$tab1"
 tw=$(width "$TOWER"); a=$(area "$TOWER"); eq "tower column is 40%" "$(( tw * 100 / a ))" 40
-eq "new pane is labelled as owned" "$(herdr pane get "$p1" | field label)" "🐝 启动中"
+eq "new pane is labelled as owned" "$(herdr pane get "$p1" | field label)" "🚀 启动中"
 p2=$(place); p3=$(place); p4=$(place)
 eq "four in right column plus tower" "$(count_in_tab "$TOWER")" 5
 hs=$(for p in "$p1" "$p2" "$p3" "$p4"; do height "$p"; done | sort -n)
@@ -40,10 +40,10 @@ lo=$(printf '%s\n' "$hs" | head -1); hi=$(printf '%s\n' "$hs" | tail -1)
 [ $(( hi - lo )) -le 1 ] && ok || bad "four panes near equal height" "$hs"
 p5=$(place); t2=$(tab_of "$p5")
 [ "$t2" != "$tab1" ] && ok || bad "fifth pane must overflow"
-eq "overflow tab name" "$(tab_label "$t2")" "🐝 调度 2"
+eq "overflow tab name" "$(tab_label "$t2")" "🚀 调度 2"
 p6=$(place); p7=$(place); p8=$(place)
 eq "overflow tab holds four" "$(count_in_tab "$p5")" 4
-p9=$(place); eq "ninth goes to third tab" "$(tab_label "$(tab_of "$p9")")" "🐝 调度 3"
+p9=$(place); eq "ninth goes to third tab" "$(tab_label "$(tab_of "$p9")")" "🚀 调度 3"
 
 # --- freed slot is reused, tower tab first
 herdr pane close "$p2" >/dev/null; p10=$(place)
@@ -66,14 +66,14 @@ fh=$(height "$foreign")
 q=$(place); [ "$(tab_of "$q")" != "$tab1" ] && ok || bad "must not split a tab holding a foreign pane"
 eq "foreign pane height unchanged" "$(height "$foreign")" "$fh"
 eq "foreign pane label unchanged" "$(herdr pane get "$foreign" | field label)" ""
-eq "overflow named from 2" "$(tab_label "$(tab_of "$q")")" "🐝 调度 2"
+eq "overflow named from 2" "$(tab_label "$(tab_of "$q")")" "🚀 调度 2"
 
 # --- a foreign pane in an overflow-named tab is not split
 new_space
-j=$(herdr tab create --workspace "$WS" --label "🐝 调度 2" --cwd /tmp --no-focus); up=$(printf '%s' "$j" | field pane_id)
+j=$(herdr tab create --workspace "$WS" --label "🚀 调度 2" --cwd /tmp --no-focus); up=$(printf '%s' "$j" | field pane_id)
 herdr pane split "$TOWER" --direction down --cwd /tmp --no-focus >/dev/null
 q=$(place); [ "$(tab_of "$q")" != "$(tab_of "$up")" ] && ok || bad "must not split a user pane in a tab named like an overflow tab"
-eq "next free name used" "$(tab_label "$(tab_of "$q")")" "🐝 调度 3"
+eq "next free name used" "$(tab_label "$(tab_of "$q")")" "🚀 调度 3"
 
 # --- parallel placement
 new_space; tab1=$(tab_of "$TOWER"); out=$tmp/par; mkdir -p "$out"

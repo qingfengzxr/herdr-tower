@@ -4,7 +4,7 @@
 
 **Goal:** 把 `herdr-pane-agent` 重构成 `herdr-tower`：主代理作为塔台，调度不同 CLI 和模型的子代理，herdr 展示现场；同时保留轻量的单子代理用法。
 
-**Architecture:** `SKILL.md` 负责判断和流程；Bash 脚本负责机械部分：角色配置、CLI 适配、布局分配、子代理生命周期、验证副本。布局状态不另存，从 herdr 的 pane 标签推导（`🐝` 开头的 pane 属于塔台）。
+**Architecture:** `SKILL.md` 负责判断和流程；Bash 脚本负责机械部分：角色配置、CLI 适配、布局分配、子代理生命周期、验证副本。布局状态不另存，从 herdr 的 pane 标签推导（`🚀` 开头的 pane 属于塔台）。
 
 **Tech Stack:** Bash、herdr 0.9.5 CLI、`script`（util-linux 或 BSD）、Git。不依赖 jq 和 python。
 
@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - 技能目录最终为 `~/.claude/skills/herdr-tower/`。这个目录不是 Git 仓库，计划中没有提交步骤。
-- 标签格式：`🐝 名字 · 📝 任务 · 🧠 模型 · 🧰 CLI`；未指定模型时写 `🧠 默认`。塔台标签：`🗼 塔台`。溢出 tab：`🐝 调度 N`。
+- 标签格式：`🚀 名字 · 📝 任务 · 🧠 模型 · 🧰 CLI`；未指定模型时写 `🧠 默认`。塔台标签：`🗼 塔台`。溢出 tab：`🚀 调度 N`。
 - 配置：`~/.config/herdr-tower/roles.conf`。状态：`~/.local/state/herdr-tower/<任务>/`；轻量用法用 `adhoc`。
 - 退出码：0 `done`、10 `blocked`、11 `needs_attention`、12 `aborted`、13 `timeout`、2 用法或环境错误。
 - 第一版只支持 claude、codex、grok。
@@ -83,9 +83,9 @@
 
 **Interfaces:** Produces `layout.sh place --cwd DIR`：以 `$HERDR_PANE_ID` 为塔台，输出新 pane ID。
 
-**规则：** 取得 `mkdir` 锁（等待上限 30 秒）。塔台所在 tab 中，非塔台 pane 全部以 `🐝` 开头时才可用：没有子代理则以 0.4 向右拆分；不足 4 个则从最高的 `🐝` pane 以 0.5 向下拆分。否则按序检查 `🐝 调度 N` tab，不足 4 个 pane 就拆分最高的；都满则新建下一个编号的 tab，并使用它的根 pane。新 pane 必须在释放锁之前写上临时标签 `🐝 启动中`，这样下一个分配能算到它。全程 `--no-focus`。
+**规则：** 取得 `mkdir` 锁（等待上限 30 秒）。塔台所在 tab 中，非塔台 pane 全部以 `🚀` 开头时才可用：没有子代理则以 0.4 向右拆分；不足 4 个则从最高的 `🚀` pane 以 0.5 向下拆分。否则按序检查 `🚀 调度 N` tab，不足 4 个 pane 就拆分最高的；都满则新建下一个编号的 tab，并使用它的根 pane。新 pane 必须在释放锁之前写上临时标签 `🚀 启动中`，这样下一个分配能算到它。全程 `--no-focus`。
 
-- [ ] **Step 1: 写失败测试** `tests/run-layout.sh`，在临时 workspace 中运行，用临时根 pane 作为 `HERDR_PANE_ID`：1～4 个 pane 的位置（左列宽约 40%，第 4 个时高度差不超过 1）；第 5 个进入 `🐝 调度 2`；第 9 个进入 `🐝 调度 3`；关闭中间 pane 后再放置，回到第 1 个 tab；全部关闭后重建右列；已有非 `🐝` pane 时不动它，直接进溢出 tab；并行 6 个 place，ID 全部唯一，第 1 个 tab 不超过 4 个子代理；用户焦点不变。
+- [ ] **Step 1: 写失败测试** `tests/run-layout.sh`，在临时 workspace 中运行，用临时根 pane 作为 `HERDR_PANE_ID`：1～4 个 pane 的位置（左列宽约 40%，第 4 个时高度差不超过 1）；第 5 个进入 `🚀 调度 2`；第 9 个进入 `🚀 调度 3`；关闭中间 pane 后再放置，回到第 1 个 tab；全部关闭后重建右列；已有非 `🚀` pane 时不动它，直接进溢出 tab；并行 6 个 place，ID 全部唯一，第 1 个 tab 不超过 4 个子代理；用户焦点不变。
 - [ ] **Step 2:** 运行，确认失败。
 - [ ] **Step 3: 实现。**
 - [ ] **Step 4:** 运行，确认全部通过，临时 workspace 已清理。
